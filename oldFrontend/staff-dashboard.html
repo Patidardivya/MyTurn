@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="js/theme.js"></script>
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+  <title>Queue Console — MyTurn</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="staff-dashboard" data-roles="STAFF" data-title="Queue Console" data-active="staff-dashboard">
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <div class="app-main">
+      <header class="topbar" id="topbar"></header>
+
+      <main class="app-content" id="staffMain">
+        <div class="page-head">
+          <h1>Queue Console</h1>
+          <p class="text-muted">Serving <b id="svcName">—</b> at <span id="svcBranch">—</span></p>
+        </div>
+
+        <!-- Live stats -->
+        <div class="stat-grid" id="staffStats"></div>
+
+        <!-- Console: counter panel + priority queue -->
+        <div class="split" style="margin-top:24px">
+          <!-- Queue table -->
+          <div>
+            <div class="row-between mb-2">
+              <h3 style="font-size:1.1rem">Waiting queue</h3>
+              <span class="badge badge-info badge-plain">Priority order</span>
+            </div>
+
+            <div class="table-wrap" id="queueTableWrap">
+              <div class="table-scroll">
+                <table class="table table-as-cards">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Token</th>
+                      <th>Type</th>
+                      <th>Visitor</th>
+                      <th>Waited</th>
+                      <th>Priority</th>
+                    </tr>
+                  </thead>
+                  <tbody id="queueTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card hidden" id="queueEmpty">
+              <div class="empty-state">
+                <span class="empty-icon">
+                  <svg viewBox="0 0 24 24" width="26" height="26"><path d="m5 12 5 5 9-11" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <h4>Queue is clear</h4>
+                <p>No one is waiting right now. New tokens will appear here automatically.</p>
+              </div>
+            </div>
+
+            <p class="form-hint" style="margin-top:12px">
+              Order combines token type (Emergency &rarr; Appointment &rarr; Normal) with waiting time —
+              the longer someone waits, the higher they climb, so no one is stuck forever.
+            </p>
+          </div>
+
+          <!-- Counter control panel -->
+          <div class="counter-panel" id="counterPanel"></div>
+        </div>
+
+        <!-- ================= STAFF ANALYTICS ================= -->
+        <section style="margin-top:32px">
+          <div class="page-head" style="margin-bottom:20px">
+            <h2 style="font-size:1.3rem">Today's Analytics</h2>
+            <p class="text-muted" style="font-size:.9rem">Live stats for your service counter.</p>
+          </div>
+          <div class="split-even">
+            <div class="chart-card card-pad">
+              <div class="row-between mb-3">
+                <h3 style="font-size:1rem">Daily Visitors</h3>
+                <span class="badge badge-info badge-plain">This week</span>
+              </div>
+              <div style="position:relative;height:180px"><canvas id="staffChartVisitors"></canvas></div>
+            </div>
+            <div class="chart-card card-pad">
+              <div class="row-between mb-3">
+                <h3 style="font-size:1rem">Visit Outcomes</h3>
+                <span class="badge badge-plain">Today</span>
+              </div>
+              <div style="position:relative;height:180px"><canvas id="staffChartDoughnut"></canvas></div>
+            </div>
+          </div>
+          <div class="chart-card card-pad" style="margin-top:20px">
+            <div class="row-between mb-3">
+              <h3 style="font-size:1rem">Peak Hours</h3>
+              <span class="badge badge-warning badge-plain">Avg per hour</span>
+            </div>
+            <div style="position:relative;height:160px"><canvas id="staffChartPeak"></canvas></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/queue.js"></script>
+  <script src="js/staff.js"></script>
+  <script src="js/assistant.js"></script>
+  <script src="js/command-menu.js"></script>
+</body>
+</html>
+

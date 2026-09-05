@@ -1,0 +1,268 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  SERVICE_PROVIDER
+  ADMIN
+}
+
+enum OrgStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SUSPENDED
+  ACTIVE
+}
+
+enum CounterStatus {
+  ACTIVE
+  PAUSED
+  BREAK
+  CLOSED
+}
+
+enum TicketPriority {
+  NORMAL
+  APPOINTMENT
+  EMERGENCY
+}
+
+enum TicketStatus {
+  WAITING
+  CALLED
+  SERVING
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+  TRANSFERRED
+}
+
+enum AppointmentStatus {
+  UPCOMING
+  CONFIRMED
+  CHECKED_IN
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+model User {
+  id             String    @id @default(uuid())
+  name           String
+  email          String    @unique
+  passwordHash   String
+  phone          String?
+  role           Role      @default(USER)
+  status         String    @default("ACTIVE")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  lastLoginAt    DateTime?
+
+  tickets         Ticket[]
+  appointments    Appointment[]
+  notifications   Notification[]
+  favorites       Favorite[]
+  reviews         Review[]
+  staffProfile    Staff?
+  auditLogs       AuditLog[]     @relation("ActorLogs")
+}
+
+model Organization {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+  logo        String?
+  category    String?
+  status      OrgStatus   @default(PENDING)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  branches    Branch[]
+}
+
+model Branch {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  address        String?
+  city           String?
+  latitude       Float?
+  longitude      Float?
+  openingTime    String?
+  closingTime    String?
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  services       Service[]
+  counters       Counter[]
+  staff          Staff[]
+  queues         Queue[]
+  tickets        Ticket[]
+  favorites      Favorite[]
+  appointments   Appointment[]
+}
+
+model Service {
+  id                String       @id @default(uuid())
+  branchId          String
+  branch            Branch       @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  name              String
+  description       String?
+  estimatedDuration Int          @default(15)
+  appointmentEnabled Boolean     @default(true)
+  priorityEnabled   Boolean      @default(false)
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  tickets           Ticket[]
+  appointments      Appointment[]
+  queues            Queue[]
+  reviews           Review[]
+}
+
+model Staff {
+  id             String       @id @default(uuid())
+  userId         String       @unique
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  branchId       String
+  branch         Branch       @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  counters       Counter[]
+}
+
+model Counter {
+  id              String        @id @default(uuid())
+  branchId        String
+  branch          Branch        @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  name            String
+  status          CounterStatus @default(CLOSED)
+  currentTicketId String?       @unique
+  staffId         String?
+  staff           Staff?        @relation(fields: [staffId], references: [id], onDelete: SetNull)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  currentTicket   Ticket?       @relation("CurrentServingTicket", fields: [currentTicketId], references: [id])
+  servedTickets   Ticket[]      @relation("ServedTickets")
+}
+
+model Queue {
+  id             String       @id @default(uuid())
+  branchId       String
+  branch         Branch       @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  serviceId      String?
+  service        Service?     @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  tickets        Ticket[]
+}
+
+model Ticket {
+  id            String         @id @default(uuid())
+  ticketNumber  String
+  userId        String?
+  user          User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  queueId       String
+  queue         Queue          @relation(fields: [queueId], references: [id], onDelete: Cascade)
+  serviceId     String
+  service       Service        @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  branchId      String
+  branch        Branch         @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  
+  priorityType  TicketPriority @default(NORMAL)
+  priorityScore Int            @default(0)
+  status        TicketStatus   @default(WAITING)
+  position      Int?
+  estimatedWait Int?
+  
+  counterId     String?
+  counter       Counter?       @relation("ServedTickets", fields: [counterId], references: [id], onDelete: SetNull)
+
+  createdAt     DateTime       @default(now())
+  calledAt      DateTime?
+  startedAt     DateTime?
+  completedAt   DateTime?
+  cancelledAt   DateTime?
+
+  servingAtCounter Counter?    @relation("CurrentServingTicket")
+  review           Review?
+}
+
+model Appointment {
+  id            String            @id @default(uuid())
+  userId        String
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  serviceId     String
+  service       Service           @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  branchId      String
+  branch        Branch            @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  scheduledDate DateTime
+  scheduledTime String
+  status        AppointmentStatus @default(UPCOMING)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  branchId  String
+  branch    Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, branchId])
+}
+
+model Review {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ticketId      String   @unique
+  ticket        Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  serviceId     String
+  service       Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  rating        Int
+  waitingRating Int?
+  serviceRating Int?
+  comment       String?
+  createdAt     DateTime @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  actorUserId String?
+  actor       User?    @relation("ActorLogs", fields: [actorUserId], references: [id], onDelete: SetNull)
+  action      String
+  entityType  String
+  entityId    String
+  metadata    String?  
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+}

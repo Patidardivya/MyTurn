@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="js/theme.js"></script>
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+  <title>Notifications — MyTurn</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="notifications" data-roles="USER" data-title="Notifications" data-active="notifications">
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <div class="app-main">
+      <header class="topbar" id="topbar"></header>
+
+      <main class="app-content">
+        <div class="page-head">
+          <div class="row-between wrap">
+            <div>
+              <h1>Notifications</h1>
+              <p class="text-muted"><span id="notifUnreadLabel">All caught up</span></p>
+            </div>
+            <button class="btn btn-secondary" id="markAllRead">
+              <svg viewBox="0 0 24 24" width="18" height="18"><path d="m5 12 5 5 9-11" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Mark all as read
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <div id="notifList"></div>
+          <!-- Empty state -->
+          <div class="hidden" id="notifEmpty">
+            <div class="empty-state">
+              <span class="empty-icon">
+                <svg viewBox="0 0 24 24" width="26" height="26"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M10.5 20a1.8 1.8 0 0 0 3 0" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+              </span>
+              <h4>No notifications</h4>
+              <p>Queue updates and reminders will show up here.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/assistant.js"></script>
+  <script src="js/command-menu.js"></script>
+</body>
+</html>
+

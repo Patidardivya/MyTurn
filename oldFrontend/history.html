@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="js/theme.js"></script>
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+  <title>History — MyTurn</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="history" data-roles="USER" data-title="History" data-active="history">
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <div class="app-main">
+      <header class="topbar" id="topbar"></header>
+
+      <main class="app-content">
+        <div class="page-head">
+          <div class="row-between wrap">
+            <div>
+              <h1>Visit history</h1>
+              <p class="text-muted">Every token you've taken, with wait and service times.</p>
+            </div>
+            <!-- Filter tabs — controller reads data-filter -->
+            <div class="segmented" id="historyFilter" role="tablist" aria-label="Filter history">
+              <button class="active" data-filter="all">All</button>
+              <button data-filter="completed">Completed</button>
+              <button data-filter="cancelled">Cancelled</button>
+              <button data-filter="no-show">No-show</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap" id="historyTable">
+          <div class="table-scroll">
+            <table class="table table-as-cards">
+              <thead>
+                <tr>
+                  <th>Token</th>
+                  <th>Service</th>
+                  <th>Date</th>
+                  <th>Waiting</th>
+                  <th>Service time</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="historyBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Empty state -->
+        <div class="card hidden" id="historyEmpty">
+          <div class="empty-state">
+            <span class="empty-icon">
+              <svg viewBox="0 0 24 24" width="26" height="26"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            </span>
+            <h4>Nothing here yet</h4>
+            <p>Your completed and past visits will appear here.</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/assistant.js"></script>
+  <script src="js/command-menu.js"></script>
+</body>
+</html>
+

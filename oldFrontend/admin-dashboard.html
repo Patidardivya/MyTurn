@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="js/theme.js"></script>
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+  <title>Admin Overview — MyTurn</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="admin-dashboard" data-roles="ADMIN" data-title="Overview" data-active="admin-dashboard">
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <div class="app-main">
+      <header class="topbar" id="topbar"></header>
+
+      <main class="app-content">
+        <div class="page-head">
+          <h1>Overview</h1>
+          <p class="text-muted">Queue performance across all branches over the last 7 days.</p>
+        </div>
+
+        <!-- KPIs -->
+        <div class="stat-grid" id="adminStats"></div>
+
+        <!-- ================= ANALYTICS ================= -->
+        <section id="analytics" style="margin-top:28px">
+          <div class="split-even">
+            <!-- Visitors per day — Chart.js Bar -->
+            <div class="chart-card card-pad">
+              <div class="row-between mb-3"><h3 style="font-size:1.05rem">Visitors per day</h3><span class="badge badge-info badge-plain">This week</span></div>
+              <div style="position:relative;height:200px"><canvas id="chartVisitors"></canvas></div>
+            </div>
+            <!-- Peak hours — Chart.js Bar (amber) -->
+            <div class="chart-card card-pad">
+              <div class="row-between mb-3"><h3 style="font-size:1.05rem">Peak hours</h3><span class="badge badge-warning badge-plain">Avg per hour</span></div>
+              <div style="position:relative;height:200px"><canvas id="chartPeak"></canvas></div>
+            </div>
+          </div>
+
+          <div class="split-even" style="margin-top:22px">
+            <!-- Popular services — Chart.js Horizontal Bar -->
+            <div class="chart-card card-pad">
+              <h3 style="font-size:1.05rem" class="mb-3">Most popular services</h3>
+              <div style="position:relative;height:220px"><canvas id="chartPopular"></canvas></div>
+            </div>
+            <!-- Visit outcomes — Chart.js Doughnut -->
+            <div class="chart-card card-pad">
+              <h3 style="font-size:1.05rem" class="mb-3">Visit outcomes</h3>
+              <div style="position:relative;height:220px"><canvas id="chartDoughnut"></canvas></div>
+            </div>
+          </div>
+
+          <!-- Average wait time trend — Chart.js Line -->
+          <div class="chart-card card-pad" style="margin-top:22px">
+            <div class="row-between mb-3"><h3 style="font-size:1.05rem">Avg wait time trend</h3><span class="badge badge-plain" style="background:rgba(6,182,212,.12);color:#06b6d4;border-color:rgba(6,182,212,.25)">7-day</span></div>
+            <div style="position:relative;height:200px"><canvas id="chartAvgWait"></canvas></div>
+          </div>
+        </section>
+            <div class="chart-card card-pad">
+              <div class="row-between mb-3"><h3 style="font-size:1.05rem">Visitors per day</h3><span class="badge badge-info badge-plain">This week</span></div>
+              <div class="bars" id="chartVisitors"></div>
+            </div>
+            <!-- Peak hours -->
+            <div class="chart-card card-pad">
+              <div class="row-between mb-3"><h3 style="font-size:1.05rem">Peak hours</h3><span class="badge badge-warning badge-plain">Avg per hour</span></div>
+              <div class="bars" id="chartPeak"></div>
+            </div>
+          </div>
+
+          <div class="split-even" style="margin-top:22px">
+            <!-- Popular services -->
+            <div class="chart-card card-pad">
+              <h3 style="font-size:1.05rem" class="mb-3">Most popular services</h3>
+              <div id="chartPopular"></div>
+            </div>
+            <!-- Completion split donut -->
+            <div class="chart-card card-pad">
+              <h3 style="font-size:1.05rem" class="mb-3">Visit outcomes</h3>
+              <div class="donut-wrap">
+                <div class="donut" id="donutSplit"></div>
+                <div class="legend" id="donutLegend" style="flex:1"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Counter efficiency -->
+          <div class="chart-card card-pad" style="margin-top:22px">
+            <h3 style="font-size:1.05rem" class="mb-3">Counter efficiency</h3>
+            <div id="chartEfficiency"></div>
+          </div>
+        </section>
+
+        <!-- ================= BRANCHES ================= -->
+        <section id="branches" style="margin-top:36px">
+          <div class="row-between wrap mb-2">
+            <div>
+              <h2 style="font-size:1.4rem">Branches</h2>
+              <p class="text-muted" style="font-size:.92rem">Locations running MyTurn.</p>
+            </div>
+            <button class="btn" id="addBranchBtn">
+              <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+              Add branch
+            </button>
+          </div>
+          <div class="table-wrap"><div id="branchList"></div></div>
+        </section>
+
+        <!-- ================= SERVICES ================= -->
+        <section id="services" style="margin-top:36px">
+          <div class="row-between wrap mb-2">
+            <div>
+              <h2 style="font-size:1.4rem">Services</h2>
+              <p class="text-muted" style="font-size:.92rem">Queues configured across your branches.</p>
+            </div>
+            <button class="btn" id="addServiceBtn">
+              <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+              Add service
+            </button>
+          </div>
+          <div class="table-wrap"><div id="serviceList"></div></div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ================= ADD BRANCH MODAL ================= -->
+  <div class="modal-overlay" id="branchModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="branchModalTitle">
+      <div class="modal-header">
+        <h3 id="branchModalTitle">Add branch</h3>
+        <button class="modal-close" data-close-modal aria-label="Close">&times;</button>
+      </div>
+      <form id="branchForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="brName">Branch name</label>
+            <input class="form-input" type="text" id="brName" name="name" placeholder="e.g. Central Clinic" required>
+          </div>
+          <div class="split-even" style="gap:16px">
+            <div class="form-group">
+              <label class="form-label" for="brCategory">Category</label>
+              <select class="form-select" id="brCategory" name="category">
+                <option>Hospital</option><option>Bank</option><option>Diagnostics Lab</option>
+                <option>Government Office</option><option>College Office</option><option>Salon</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="brStatus">Status</label>
+              <select class="form-select" id="brStatus" name="status"><option value="OPEN">Open</option><option value="CLOSED">Closed</option></select>
+            </div>
+          </div>
+          <div class="split-even" style="gap:16px">
+            <div class="form-group">
+              <label class="form-label" for="brArea">Area</label>
+              <input class="form-input" type="text" id="brArea" name="area" placeholder="Vijay Nagar">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="brCity">City</label>
+              <input class="form-input" type="text" id="brCity" name="city" placeholder="Indore" value="Indore">
+            </div>
+          </div>
+          <div class="split-even" style="gap:16px">
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label" for="brOpen">Opens</label>
+              <input class="form-input" type="time" id="brOpen" name="openTime" value="09:00">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label" for="brClose">Closes</label>
+              <input class="form-input" type="time" id="brClose" name="closeTime" value="18:00">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-close-modal>Cancel</button>
+          <button class="btn" type="submit">Add branch</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= ADD/EDIT SERVICE MODAL ================= -->
+  <div class="modal-overlay" id="serviceModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="serviceModalTitle">
+      <div class="modal-header">
+        <h3 id="serviceModalTitle">Add service</h3>
+        <button class="modal-close" data-close-modal aria-label="Close">&times;</button>
+      </div>
+      <form id="serviceForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="svBranch">Branch</label>
+            <select class="form-select" id="svBranch" name="branch"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="svName">Service name</label>
+            <input class="form-input" type="text" id="svName" name="name" placeholder="e.g. General OPD" required>
+          </div>
+          <div class="split-even" style="gap:16px">
+            <div class="form-group">
+              <label class="form-label" for="svPrefix">Token prefix</label>
+              <input class="form-input" type="text" id="svPrefix" name="prefix" placeholder="Q" maxlength="2">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="svAvg">Avg service (min)</label>
+              <input class="form-input" type="number" id="svAvg" name="avgTime" min="1" value="6">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="svCounters">Counters</label>
+            <input class="form-input" type="number" id="svCounters" name="counters" min="1" value="1">
+          </div>
+          <label class="checkbox" style="display:flex;margin-bottom:10px"><input type="checkbox" name="priority"> Enable priority handling (emergency &amp; appointments first)</label>
+          <label class="checkbox" style="display:flex"><input type="checkbox" name="active" checked> Service is active</label>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-close-modal>Cancel</button>
+          <button class="btn" type="submit">Save service</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/assistant.js"></script>
+  <script src="js/command-menu.js"></script>
+</body>
+</html>
+

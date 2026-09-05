@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="js/theme.js"></script>
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+  <title>Appointments — MyTurn</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="appointments" data-roles="USER" data-title="Appointments" data-active="appointments">
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <div class="app-main">
+      <header class="topbar" id="topbar"></header>
+
+      <main class="app-content">
+        <div class="page-head">
+          <div class="row-between wrap">
+            <div>
+              <h1>Appointments</h1>
+              <p class="text-muted">Book ahead and skip the queue when you arrive.</p>
+            </div>
+            <button class="btn" id="newApptBtn">
+              <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+              Book appointment
+            </button>
+          </div>
+        </div>
+
+        <!-- Upcoming -->
+        <h3 style="font-size:1.1rem" class="mb-2">Upcoming</h3>
+        <div class="grid grid-3" id="apptUpcoming"></div>
+        <div class="card" id="apptEmptyUpcoming">
+          <div class="empty-state">
+            <span class="empty-icon">
+              <svg viewBox="0 0 24 24" width="26" height="26"><rect x="3" y="4.5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M3 9h18M8 3v3M16 3v3" stroke="currentColor" stroke-width="2"/></svg>
+            </span>
+            <h4>No upcoming appointments</h4>
+            <p>Book a slot to reserve your time and walk straight in.</p>
+            <button class="btn mt-2" onclick="document.getElementById('newApptBtn').click()">Book appointment</button>
+          </div>
+        </div>
+
+        <!-- Past -->
+        <h3 style="font-size:1.1rem" class="mb-2 mt-4">Past &amp; cancelled</h3>
+        <div class="grid grid-3" id="apptPast"></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- New appointment modal -->
+  <div class="modal-overlay" id="apptModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="apptTitle">
+      <div class="modal-header">
+        <h3 id="apptTitle">Book an appointment</h3>
+        <button class="modal-close" data-close-modal aria-label="Close">&times;</button>
+      </div>
+      <form id="apptForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="apptBranch">Service center</label>
+            <select class="form-select" id="apptBranch" name="branch"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="apptService">Service</label>
+            <select class="form-select" id="apptService" name="service"></select>
+          </div>
+          <div class="split-even" style="gap:16px">
+            <div class="form-group">
+              <label class="form-label" for="apptDate">Date</label>
+              <input class="form-input" type="date" id="apptDate" name="date" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="apptTime">Time</label>
+              <input class="form-input" type="time" id="apptTime" name="time" value="11:00" required>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label" for="apptNote">Note (optional)</label>
+            <textarea class="form-textarea" id="apptNote" name="note" placeholder="Anything the staff should know?"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-close-modal>Cancel</button>
+          <button class="btn" type="submit">Confirm booking</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/appointments.js"></script>
+  <script src="js/assistant.js"></script>
+  <script src="js/command-menu.js"></script>
+</body>
+</html>
+

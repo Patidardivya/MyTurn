@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+  <title>MyTurn — Skip the Line. Keep Your Time.</title>
+  <meta name="description" content="MyTurn is a smart digital queue management system. Take a digital token, track your queue in real time, and walk in right when it's your turn.">
+
+  <!-- Theme applied immediately in <head> to prevent flash -->
+  <script src="js/theme.js"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="landing">
+
+  <!-- ============================= SPLASH SCREEN ============================= -->
+  <div id="myturnSplash" role="status" aria-label="Loading MyTurn" aria-live="polite">
+    <div class="splash-logo-wrap">
+      <div class="splash-icon" aria-hidden="true">
+        <div class="splash-icon-inner">
+          <!-- MyTurn SVG logo mark -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" fill="none">
+            <path d="M30 8 A22 22 0 1 1 8 30" stroke="rgba(255,255,255,0.35)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M6 24 L8 30 L14 27" stroke="rgba(255,255,255,0.35)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="30" y="36" font-family="system-ui,sans-serif" font-size="18" font-weight="900" fill="white" text-anchor="middle" letter-spacing="-1">MT</text>
+          </svg>
+        </div>
+      </div>
+      <div class="splash-wordmark">MyTurn</div>
+      <div class="splash-tagline">One Token. Zero Standing.</div>
+      <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+    </div>
+  </div>
+
+  <script>
+    // Show splash only once per browser session
+    (function() {
+      var splash = document.getElementById('myturnSplash');
+      if (!splash) return;
+      if (sessionStorage.getItem('myturn_splash_shown')) {
+        splash.style.display = 'none';
+        return;
+      }
+      // Auto-dismiss after 2.2s
+      setTimeout(function() {
+        splash.classList.add('splash-hiding');
+        setTimeout(function() { splash.style.display = 'none'; }, 580);
+        sessionStorage.setItem('myturn_splash_shown', '1');
+      }, 2200);
+    })();
+  </script>
+
+  <!-- ============================= NAVBAR ============================= -->
+  <header class="navbar" id="mainNavbar">
+    <div class="container navbar-inner">
+      <a class="brand" href="index.html" aria-label="MyTurn home">
+        <span class="brand-mark">MT</span> MyTurn
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#how">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#sectors">Who it's for</a>
+        <a href="#benefits">Benefits</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle dark mode" title="Toggle dark mode">
+          <!-- Icon injected by theme.js -->
+        </button>
+        <a class="btn btn-ghost btn-sm" href="login.html">Log in</a>
+        <a class="btn btn-sm" href="register.html">Get My Token</a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================= HERO ============================= -->
+  <section class="hero">
+    <!-- Decorative blurred orbs -->
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+
+    <div class="container hero-grid">
+      <!-- Left: copy -->
+      <div>
+        <span class="eyebrow hero-text-anim" data-delay="1">Smart Digital Queue System</span>
+        <h1 class="hero-text-anim" data-delay="2">
+          One Token.<br>          <span class="gradient-text">Zero Standing.</span>
+        </h1>
+        <p class="lead hero-text-anim" data-delay="3">
+          Stop standing in crowded waiting rooms. Take a digital token from your phone,
+          watch your position update live, and arrive exactly when it's your turn —
+          at hospitals, banks, labs, and government offices.
+        </p>
+
+        <div class="hero-cta hero-text-anim" data-delay="4">
+          <a class="btn btn-lg" href="register.html" data-cta-primary>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2 2 2 0 0 0 0 4 2 2 0 0 1-2 2H6a2 2 0 0 1-2-2 2 2 0 0 0 0-4Z"/><path d="M15 6v12"/></svg>
+            Get My Token
+          </a>
+          <a class="btn btn-lg btn-secondary" href="#how">See How It Works</a>
+        </div>
+
+        <div class="hero-trust hero-text-anim" data-delay="5">
+          <span class="t-item">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="m5 12 5 5 9-11" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            No app install needed
+          </span>
+          <span class="t-item">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="m5 12 5 5 9-11" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Live position &amp; wait time
+          </span>
+          <span class="t-item">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="m5 12 5 5 9-11" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Free for visitors
+          </span>
+        </div>
+      </div>
+
+      <!-- Right: animated live dashboard mockup -->
+      <div class="hero-mock" aria-hidden="true">
+        <span class="mock-badge"><span class="pulse-dot"></span> Live</span>
+
+        <div class="mock-top">
+          <div class="brand" style="font-size:.98rem">
+            <span class="brand-mark" style="width:28px;height:28px;border-radius:8px;font-size:.55rem">MT</span>
+            MyTurn
+          </div>
+          <div class="mock-dots"><i></i><i></i><i></i></div>
+        </div>
+
+        <div class="mock-token">
+          <div class="lbl">Your Token</div>
+          <div class="num" id="mockToken">Q47</div>
+          <div style="font-size:.78rem;opacity:.88;margin-top:4px">Cardiology OPD · City Care Hospital</div>
+        </div>
+
+        <div class="mock-stats">
+          <div class="mock-stat">
+            <div class="v" id="mockServing">Q43</div>
+            <div class="k">Now serving</div>
+          </div>
+          <div class="mock-stat">
+            <div class="v" id="mockAhead">4</div>
+            <div class="k">Ahead of you</div>
+          </div>
+          <div class="mock-stat">
+            <div class="v" id="mockWait">28m</div>
+            <div class="k">Est. wait</div>
+          </div>
+        </div>
+
+        <div class="mock-progress">
+          <div class="row-between">
+            <span style="font-size:.78rem;color:var(--text-muted)">Queue progress</span>
+            <span class="mock-pct" style="font-size:.78rem;color:var(--text-muted)">60%</span>
+          </div>
+          <div class="progress">
+            <div class="progress-bar" id="mockProgressBar" style="width:60%"></div>
+          </div>
+        </div>
+
+        <!-- Floating notification popup -->
+        <div class="hero-notif-pop">
+          <div class="notif-icon">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10.5 20a1.8 1.8 0 0 0 3 0"/></svg>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:.8rem">Your turn is near!</div>
+            <div style="font-size:.72rem;color:var(--text-muted)">Please head to the counter</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= PROBLEM ============================= -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">The problem</span>
+        <h2>Waiting in line is broken</h2>
+        <p>Physical queues waste time, crowd waiting rooms, and leave people with no idea how long they'll be stuck.</p>
+      </div>
+      <div class="problem-grid">
+        <div class="problem-card reveal" data-delay="1">
+          <div class="stat-num">37 min</div>
+          <h4>Average wait, wasted</h4>
+          <p>People routinely lose over half an hour standing in line with no way to use that time productively.</p>
+        </div>
+        <div class="problem-card reveal" data-delay="2">
+          <div class="stat-num">1 in 3</div>
+          <h4>Leave without service</h4>
+          <p>Long, unpredictable lines cause a third of visitors to give up and walk out without being served.</p>
+        </div>
+        <div class="problem-card reveal" data-delay="3">
+          <div class="stat-num">Zero</div>
+          <h4>Visibility</h4>
+          <p>No live position, no estimated time, no notifications — just guessing and waiting. That ends now.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= HOW IT WORKS ============================= -->
+  <section class="section" id="how" style="background:var(--surface-2);border-block:1px solid var(--border)">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">How it works</span>
+        <h2>From queue to counter in four steps</h2>
+        <p>No downloads, no paperwork. Just pick a service and let MyTurn hold your place.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal" data-delay="1">
+          <div class="step-num">1</div>
+          <h4>Find a service</h4>
+          <p>Search nearby hospitals, banks, labs, and offices. Pick the counter you need in seconds.</p>
+        </div>
+        <div class="step reveal" data-delay="2">
+          <div class="step-num">2</div>
+          <h4>Take a token</h4>
+          <p>Get a digital token instantly. Your spot is reserved the moment you tap — from anywhere.</p>
+        </div>
+        <div class="step reveal" data-delay="3">
+          <div class="step-num">3</div>
+          <h4>Track live</h4>
+          <p>Watch the number being served, your position, and a live estimated wait time in real-time.</p>
+        </div>
+        <div class="step reveal" data-delay="4">
+          <div class="step-num">4</div>
+          <h4>Walk in on time</h4>
+          <p>Get notified as your turn approaches and arrive right when the counter is ready for you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= FEATURES (BENTO GRID) ============================= -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Features</span>
+        <h2>Everything you need to never wait blindly again</h2>
+        <p>A complete queue management system for visitors, staff, and administrators.</p>
+      </div>
+
+      <div class="bento-grid">
+
+        <!-- Big card: Real-time tracking -->
+        <div class="bento-card bento-lg reveal">
+          <div class="b-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+          </div>
+          <h3>Real-time queue tracking</h3>
+          <p>Watch your live queue position update automatically. See exactly who is being served, how many people are ahead, and your estimated wait — all in one glance.</p>
+          <div class="bento-queue-vis" aria-hidden="true">
+            <div class="bar-mini" style="height:40%"></div>
+            <div class="bar-mini" style="height:65%"></div>
+            <div class="bar-mini active" style="height:100%"></div>
+            <div class="bar-mini" style="height:75%"></div>
+            <div class="bar-mini" style="height:50%"></div>
+            <div class="bar-mini" style="height:85%"></div>
+            <div class="bar-mini" style="height:55%"></div>
+            <div class="bar-mini" style="height:70%"></div>
+            <div class="bar-mini" style="height:45%"></div>
+            <div class="bar-mini" style="height:90%"></div>
+            <div class="bar-mini" style="height:60%"></div>
+            <div class="bar-mini" style="height:35%"></div>
+          </div>
+        </div>
+
+        <!-- Small card: Digital Tokens -->
+        <div class="bento-card bento-md reveal" data-delay="1">
+          <div class="b-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2 2 2 0 0 0 0 4 2 2 0 0 1-2 2H6a2 2 0 0 1-2-2 2 2 0 0 0 0-4Z"/><path d="M15 6v12"/></svg>
+          </div>
+          <h3>Digital tokens</h3>
+          <p>Grab a numbered token from your phone in seconds. No paper slips, no crowding the desk.</p>
+          <div class="bento-stat-row" aria-hidden="true">
+            <div class="bento-stat"><div class="v">Q47</div><div class="k">Your token</div></div>
+            <div class="bento-stat"><div class="v">Q43</div><div class="k">Now serving</div></div>
+          </div>
+        </div>
+
+        <!-- Small card: Smart notifications -->
+        <div class="bento-card bento-sm reveal" data-delay="1">
+          <div class="b-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10.5 20a1.8 1.8 0 0 0 3 0"/></svg>
+          </div>
+          <h3>Smart alerts</h3>
+          <p>Get notified as your turn approaches so you can step away and come back right on time.</p>
+          <div class="bento-notif" aria-hidden="true">
+            <div class="notif-dot"></div>
+            <span style="font-size:.82rem">Your turn is near! Please head to the counter.</span>
+          </div>
+        </div>
+
+        <!-- Small card: Priority handling -->
+        <div class="bento-card bento-sm reveal" data-delay="2">
+          <div class="b-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3 4 14h6l-1 7 9-11h-6l1-7Z"/></svg>
+          </div>
+          <h3>Priority handling</h3>
+          <p>Emergencies and appointments are served fairly — no one is stuck waiting forever.</p>
+        </div>
+
+        <!-- Small card: Appointment booking -->
+        <div class="bento-card bento-sm reveal" data-delay="3">
+          <div class="b-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v3M16 3v3"/></svg>
+          </div>
+          <h3>Appointment booking</h3>
+          <p>Can't wait today? Reserve a future slot and skip the queue entirely when you arrive.</p>
+        </div>
+
+        <!-- Medium card: Staff tools -->
+        <div class="bento-card bento-half reveal" data-delay="2">
+          <div class="b-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+          </div>
+          <h3>Staff &amp; admin tools</h3>
+          <p>A real-time queue console for staff to call tokens and manage flow, plus a live analytics dashboard for admins with charts, trends, and efficiency metrics.</p>
+          <div class="bento-stat-row mt-2" aria-hidden="true">
+            <div class="bento-stat"><div class="v">482</div><div class="k">Visitors</div></div>
+            <div class="bento-stat"><div class="v">87%</div><div class="k">Efficiency</div></div>
+            <div class="bento-stat"><div class="v">18m</div><div class="k">Avg wait</div></div>
+          </div>
+        </div>
+
+        <!-- Medium card: History -->
+        <div class="bento-card bento-half reveal" data-delay="3">
+          <div class="b-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg>
+          </div>
+          <h3>Visit history</h3>
+          <p>Every visit is logged with service, wait time, and outcome. Review your full history with smart filters for status and date.</p>
+          <div class="bento-stat-row mt-2" aria-hidden="true">
+            <div class="bento-stat"><div class="v" style="color:var(--success-text)">✓ Done</div><div class="k">Completed</div></div>
+            <div class="bento-stat"><div class="v" style="color:var(--warning-text)">↩ Back</div><div class="k">Cancelled</div></div>
+            <div class="bento-stat"><div class="v" style="color:var(--info-text)">📋 All</div><div class="k">History</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= SECTORS ============================= -->
+  <section class="section" id="sectors" style="background:var(--surface-2);border-block:1px solid var(--border)">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Who it's for</span>
+        <h2>Built for anywhere people wait</h2>
+        <p>MyTurn works for any organization where people queue up for service.</p>
+      </div>
+      <div class="cat-grid">
+        <div class="cat reveal" data-delay="1">
+          <span class="c-icon">🏥</span>
+          <div><div class="c-name">Hospitals</div><div class="c-sub">OPDs &amp; clinics</div></div>
+        </div>
+        <div class="cat reveal" data-delay="1">
+          <span class="c-icon">🏦</span>
+          <div><div class="c-name">Banks</div><div class="c-sub">Branches &amp; KYC</div></div>
+        </div>
+        <div class="cat reveal" data-delay="2">
+          <span class="c-icon">🧪</span>
+          <div><div class="c-name">Diagnostics</div><div class="c-sub">Labs &amp; imaging</div></div>
+        </div>
+        <div class="cat reveal" data-delay="2">
+          <span class="c-icon">🏛️</span>
+          <div><div class="c-name">Government</div><div class="c-sub">RTO &amp; civic desks</div></div>
+        </div>
+        <div class="cat reveal" data-delay="3">
+          <span class="c-icon">🎓</span>
+          <div><div class="c-name">Universities</div><div class="c-sub">Admissions &amp; fees</div></div>
+        </div>
+        <div class="cat reveal" data-delay="3">
+          <span class="c-icon">✂️</span>
+          <div><div class="c-name">Salons &amp; Spas</div><div class="c-sub">Chair booking</div></div>
+        </div>
+        <div class="cat reveal" data-delay="4">
+          <span class="c-icon">🔧</span>
+          <div><div class="c-name">Service centers</div><div class="c-sub">Any counter</div></div>
+        </div>
+        <div class="cat reveal" data-delay="4">
+          <span class="c-icon">📍</span>
+          <div><div class="c-name">And more</div><div class="c-sub">Wherever lines form</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= SMART WAIT VIS ============================= -->
+  <section class="section wait-section" id="waitSection">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Smart wait tracking</span>
+        <h2>Always know exactly where you stand</h2>
+        <p>MyTurn tracks your journey from token to counter in real time.</p>
+      </div>
+      <div class="wait-vis-card reveal">
+        <div class="wait-big-num" id="waitBigNum">28 min</div>
+        <p style="text-align:center;margin-top:8px;font-size:.9rem">Estimated time until your turn</p>
+        <div class="wait-track">
+          <div class="wait-step" data-step="0">
+            <div class="ws-dot">1</div>
+            <span>Token issued — <strong>Q47</strong> reserved for Cardiology OPD</span>
+          </div>
+          <div class="wait-step" data-step="1">
+            <div class="ws-dot">2</div>
+            <span>Queue joined — <strong>4 people</strong> ahead of you</span>
+          </div>
+          <div class="wait-step" data-step="2">
+            <div class="ws-dot">3</div>
+            <span>Getting closer — <strong>2 people</strong> remaining</span>
+          </div>
+          <div class="wait-step" data-step="3">
+            <div class="ws-dot">4</div>
+            <span>Almost there — <strong>you're next!</strong> Head to counter now</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= IMPACT / STATS ============================= -->
+  <section class="section-sm" id="benefits">
+    <div class="container">
+      <div class="stats-band reveal">
+        <div class="grid grid-4">
+          <div class="big-stat">
+            <span class="v"><span class="count-target" data-target="72" data-suffix="%">72%</span></span>
+            <span class="k">Less time spent waiting</span>
+          </div>
+          <div class="big-stat">
+            <span class="v"><span class="count-target" data-target="4.8" data-suffix="/5" data-decimals="1">4.8/5</span></span>
+            <span class="k">Average visitor rating</span>
+          </div>
+          <div class="big-stat">
+            <span class="v"><span class="count-target" data-target="18" data-suffix=" min">18 min</span></span>
+            <span class="k">Typical wait, tracked live</span>
+          </div>
+          <div class="big-stat">
+            <span class="v"><span class="count-target" data-target="6" data-suffix="+">6+</span></span>
+            <span class="k">Sectors supported</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= LIVE ACTIVITY FEED ============================= -->
+  <section class="section-sm" style="background:var(--surface-2);border-block:1px solid var(--border)">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Happening right now</span>
+        <h2>Live across MyTurn</h2>
+        <p>Real activity happening across the MyTurn network, right now.</p>
+      </div>
+      <div class="live-feed-wrap reveal">
+        <div class="live-badge-demo">
+          <span class="pulse-dot"></span> Live activity feed
+        </div>
+        <div id="liveActivityFeed"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= AI ASSISTANT PROMO ============================= -->
+  <section class="section-sm">
+    <div class="container reveal">
+      <div class="assistant-promo-card">
+        <div style="max-width:560px;position:relative;z-index:1">
+          <span class="eyebrow" style="color:#fff;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25)">MyTurn Assistant</span>
+          <h2 style="margin-top:16px;font-size:clamp(1.6rem,3vw,2.2rem)">Ask anything about your queue</h2>
+          <p style="margin-top:12px;font-size:1.05rem;max-width:480px">
+            "Where is my token?" "How long is my wait?" "Cancel my queue." The built-in AI assistant reads your live data and answers instantly.
+          </p>
+          <div class="asst-chip-row">
+            <button class="asst-chip" onclick="if(typeof Assistant!=='undefined')Assistant.open()">Where is my token?</button>
+            <button class="asst-chip" onclick="if(typeof Assistant!=='undefined')Assistant.open()">How long is my wait?</button>
+            <button class="asst-chip" onclick="if(typeof Assistant!=='undefined')Assistant.open()">My appointment</button>
+            <button class="asst-chip" onclick="if(typeof Assistant!=='undefined')Assistant.open()">Cancel my queue</button>
+          </div>
+        </div>
+        <!-- Decorative mockup -->
+        <div style="position:absolute;right:40px;top:50%;transform:translateY(-50%);display:none" aria-hidden="true" id="asstPromoMock">
+          <!-- Hidden on mobile, shown ≥1024px via CSS would need extra class -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= TESTIMONIALS ============================= -->
+  <section class="section" style="background:var(--surface-2);border-block:1px solid var(--border)">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">What people say</span>
+        <h2>Loved by users across the city</h2>
+        <p>Real feedback from real users who use MyTurn every day.</p>
+      </div>
+      <div class="testimonials-grid">
+
+        <div class="testimonial-card reveal" data-delay="1">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote">
+            Used it at City Care Hospital's OPD. I could see exactly when to arrive — no more sitting for 2 hours in a crowded room. This is the future of healthcare queues.
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar av-1">DM</div>
+            <div>
+              <div class="testimonial-name">Divya Mehta</div>
+              <div class="testimonial-role">Patient, Cardiology OPD</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card reveal" data-delay="2">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote">
+            As a bank staff member, the queue console is a lifesaver. I can call the next token with one tap, see who's waiting, and manage flow without any paper slips.
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar av-2">RK</div>
+            <div>
+              <div class="testimonial-name">Rahul Kumar</div>
+              <div class="testimonial-role">Counter Staff, AxisPoint Bank</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card reveal" data-delay="3">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote">
+            The admin analytics are incredible. I can see peak hours, average wait times, and counter efficiency — all in one dashboard. Decisions are now data-driven.
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar av-3">AS</div>
+            <div>
+              <div class="testimonial-name">Ananya Sharma</div>
+              <div class="testimonial-role">Branch Manager, Admin</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= FAQ ============================= -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">FAQ</span>
+        <h2>Frequently asked questions</h2>
+        <p>Everything you need to know about MyTurn.</p>
+      </div>
+
+      <div class="faq-list">
+
+        <div class="faq-item reveal" data-delay="1">
+          <button class="faq-q" aria-expanded="false">
+            Do I need to install an app?
+            <div class="faq-icon">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">No! MyTurn runs entirely in your mobile browser. Just open the website on any smartphone. It works on iOS, Android, and any modern browser with no download required.</div></div>
+        </div>
+
+        <div class="faq-item reveal" data-delay="2">
+          <button class="faq-q" aria-expanded="false">
+            Is MyTurn free to use?
+            <div class="faq-icon">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">MyTurn is completely free for visitors and patients. Organizations (hospitals, banks, government offices) subscribe to a plan that enables queue management for their branches. Walk-in users never pay a thing.</div></div>
+        </div>
+
+        <div class="faq-item reveal" data-delay="3">
+          <button class="faq-q" aria-expanded="false">
+            How accurate is the wait time estimate?
+            <div class="faq-icon">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">The wait time estimate is calculated in real-time based on the number of people ahead of you, the average service time for that specific counter, and the number of active counters. It updates live as people are served.</div></div>
+        </div>
+
+        <div class="faq-item reveal" data-delay="4">
+          <button class="faq-q" aria-expanded="false">
+            Can I cancel my token if my plans change?
+            <div class="faq-icon">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">Yes, absolutely. You can cancel your token at any time from the "My Queue" page. Your spot is released immediately, and the queue advances for everyone behind you.</div></div>
+        </div>
+
+        <div class="faq-item reveal" data-delay="4">
+          <button class="faq-q" aria-expanded="false">
+            What happens if I miss my turn?
+            <div class="faq-icon">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">If your token is called but you don't appear within a short window, it may be marked as a no-show by the staff. You'll receive a notification before your turn so you have time to return. You can then re-join the queue for a new token.</div></div>
+        </div>
+
+        <div class="faq-item reveal" data-delay="5">
+          <button class="faq-q" aria-expanded="false">
+            Can I book appointments in advance?
+            <div class="faq-icon">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">Yes! The Appointments feature lets you reserve a slot for a future date. When you arrive, your appointment token is prioritized in the queue. You can manage, reschedule, or cancel appointments from your dashboard.</div></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= CONNECT / CONTACT ============================= -->
+  <section class="section-sm" style="background:var(--surface-2);border-block:1px solid var(--border)">
+    <div class="container">
+      <div class="grid grid-2" style="gap:56px;align-items:start">
+
+        <div class="reveal">
+          <span class="eyebrow">Connect with us</span>
+          <h2 style="margin-top:14px">We'd love to hear from you</h2>
+          <p style="margin-top:12px;font-size:1.05rem">Have a question, feedback, or want to bring MyTurn to your organization? Reach out — we respond to every message.</p>
+
+          <div class="social-links" style="margin-top:28px">
+            <!-- GitHub -->
+            <a href="#" class="social-btn" aria-label="GitHub" title="GitHub">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            </a>
+            <!-- Twitter/X -->
+            <a href="#" class="social-btn" aria-label="Twitter / X" title="Twitter / X">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l16 16M4 20 20 4"/></svg>
+            </a>
+            <!-- LinkedIn -->
+            <a href="#" class="social-btn" aria-label="LinkedIn" title="LinkedIn">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <!-- Mail -->
+            <a href="mailto:hello@myturn.demo" class="social-btn" aria-label="Email us" title="Email us">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+            </a>
+          </div>
+
+          <!-- Keyboard shortcut hint -->
+          <div class="row" style="gap:8px;margin-top:32px;color:var(--text-subtle);font-size:.86rem">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            Press <kbd style="padding:2px 7px;border-radius:5px;background:var(--surface-3);border:1px solid var(--border);font-family:var(--font-mono);font-size:.76rem">Ctrl+K</kbd> anywhere to open the command menu
+          </div>
+        </div>
+
+        <!-- Contact form -->
+        <div class="contact-form-wrap reveal" data-delay="2">
+          <form id="contactForm">
+            <div class="form-group">
+              <label class="form-label" for="cName">Your name</label>
+              <input class="form-input" type="text" id="cName" name="name" placeholder="Priya Patel" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="cEmail">Email address</label>
+              <input class="form-input" type="email" id="cEmail" name="email" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group" style="margin-bottom:20px">
+              <label class="form-label" for="cMessage">Message</label>
+              <textarea class="form-textarea" id="cMessage" name="message" placeholder="Tell us how we can help…" required></textarea>
+            </div>
+            <button class="btn btn-block" type="submit">
+              Send message
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+            </button>
+          </form>
+          <div class="contact-success" id="contactSuccess">
+            <div class="check-icon">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-11"/></svg>
+            </div>
+            <h3>Message sent!</h3>
+            <p style="margin-top:8px">Thanks for reaching out. We'll get back to you within 24 hours.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= FINAL CTA ============================= -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="cta-band reveal">
+        <h2>Ready to skip the wait?</h2>
+        <p>Join MyTurn and turn every queue into a few taps. Take your first digital token in under a minute.</p>
+        <div class="hero-cta" style="justify-content:center">
+          <a class="btn btn-lg" href="register.html" data-cta-primary>
+            Get MyTurn
+          </a>
+          <a class="btn btn-lg btn-outline" href="login.html">
+            I already have a MyTurn account
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= FOOTER ============================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="index.html" aria-label="MyTurn home">
+            <span class="brand-mark">MT</span> MyTurn
+          </a>
+          <p class="footer-desc">One Token. Zero Standing. Smart digital queue management for the places you visit most.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="GitHub">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            </a>
+            <a href="#" aria-label="Twitter">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l16 16M4 20 20 4"/></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="mailto:hello@myturn.demo" aria-label="Email">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h5>Product</h5>
+          <div class="f-links">
+            <a href="#how">How it works</a>
+            <a href="#features">Features</a>
+            <a href="#sectors">Who it's for</a>
+            <a href="#faq">FAQ</a>
+          </div>
+        </div>
+
+        <div>
+          <h5>Account</h5>
+          <div class="f-links">
+            <a href="login.html">Log in</a>
+            <a href="register.html">Create account</a>
+            <a href="user-dashboard.html">Dashboard</a>
+            <a href="appointments.html">Appointments</a>
+          </div>
+        </div>
+
+        <div>
+          <h5>Company</h5>
+          <div class="f-links">
+            <a href="#">About</a>
+            <a href="#">Privacy policy</a>
+            <a href="#">Terms of service</a>
+            <a href="#">Contact</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; <span data-year>2026</span> MyTurn. Built as a portfolio prototype.</span>
+        <span>Made with HTML, CSS &amp; Vanilla JS &mdash; No frameworks.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts loaded in dependency order -->
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/assistant.js"></script>
+  <script src="js/command-menu.js"></script>
+
+</body>
+</html>

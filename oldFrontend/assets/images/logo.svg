@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Background pill -->
+  <rect width="48" height="48" rx="13" fill="url(#logoGrad)"/>
+  <!-- Outer circular arc (queue flow path) -->
+  <path d="M24 8 A16 16 0 1 1 8 24" stroke="rgba(255,255,255,0.28)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <!-- Arrow on arc end -->
+  <path d="M6.5 20 L8 24 L11.5 21.5" stroke="rgba(255,255,255,0.28)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Inner arc (second queue ring) -->
+  <path d="M24 14 A10 10 0 1 1 14 24" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+  <!-- MT lettermark -->
+  <text x="24" y="31" font-family="system-ui,-apple-system,sans-serif" font-size="15" font-weight="900" fill="white" text-anchor="middle" letter-spacing="-1">MT</text>
+  <defs>
+    <linearGradient id="logoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="60%" stop-color="#6d28d9"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+</svg>
