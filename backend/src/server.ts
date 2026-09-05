@@ -44,6 +44,13 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.get('/', (_req, res) => {
+  res.json({
+    message: 'MyTurn Backend is Live 🚀',
+    status: 'ok'
+  });
+});
+
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
