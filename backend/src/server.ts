@@ -23,16 +23,20 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: {
-    origin: (process.env.CLIENT_URL || 'http://localhost:5173').split(',').map(origin => origin.trim()),
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+cors: {
+    origin: "https://myturn-frontend.onrender.com",
+    methods: ['GET', 'POST'],
+    credentials: true,
   },
 });
+ 
 
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: (process.env.CLIENT_URL || 'http://localhost:5173').split(',').map(origin => origin.trim()),
+  origin: "https://myturn-frontend.onrender.com",
+  methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE', 'OPTIONS'],
+  credentials: true
 }));
 app.use(express.json());
 app.use(morgan('dev'));
