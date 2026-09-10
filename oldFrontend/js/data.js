@@ -32,7 +32,7 @@
    * buildMyTurnSeed() -> full database object.
    * Called by Store.seed() the first time the app runs.
    */
-  window.buildQueuelessSeed = function buildMyTurnSeed() {
+  window.buildMyTurnSeed = function buildMyTurnSeed() {
 
     /* ---------------- USERS (table: users) ----------------
        role drives which dashboard the user lands on.
